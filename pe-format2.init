@@ -1,0 +1,56 @@
+#!/sbin/runscript
+# Copyright 1999-2010 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+	after procfs
+	use localmount
+}
+
+start() {
+	ebegin "Generating configuration for pe-exec"
+	printf '%s\0%s\0%s\0%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
+	eend $? || return $?
+
+	ebegin "Registering PE binaries with pe-exec wrapper"
+
+	if [ ! -d /proc/sys/fs/binfmt_misc ]; then
+		eend 1
+		eerror 'You need support for "misc binaries" in your kernel!'
+		return 1
+	fi
+
+	if [ -f /proc/sys/fs/binfmt_misc/PE ]; then
+		eend 1
+		eerror "Another handler for PE files is already registered!"
+		eerror "If that's pe-format, you should stop it:"
+		eerror "	/etc/init.d/pe-format stop"
+		eerror "You may also unregister the handler manually:"
+		eerror "	echo '-1' > /proc/sys/fs/binfmt_misc/PE"
+
+		return 1
+	elif [ ! -f /proc/sys/fs/binfmt_misc/register ]; then
+		local ret
+
+		mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc
+		ret=$?
+		if [ ${ret} -ne 0 ]; then
+			eend ${ret}
+			return ${ret}
+		fi
+	fi
+
+	echo ':PE:M::MZ::/usr/bin/pe-exec:' > /proc/sys/fs/binfmt_misc/register
+	eend $?
+}
+
+stop() {
+	ebegin "Unregistering PE binaries"
+
+	if [ -f /proc/sys/fs/binfmt_misc/PE ]; then
+		echo '-1' > /proc/sys/fs/binfmt_misc/PE
+	fi
+
+	eend $?
+}
