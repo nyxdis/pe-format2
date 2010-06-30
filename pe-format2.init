@@ -3,15 +3,23 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+extra_commands=reload
+description='Associate PE binaries with pe-exec using binfmt_misc'
+description_reload='Regenerate the configuration file for pe-exec'
+
 depend() {
 	after procfs
 	use localmount
 }
 
-start() {
+reload() {
 	ebegin "Generating configuration for pe-exec"
 	printf '%s\0%s\0%s\0%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
 	eend $? || return $?
+}
+
+start() {
+	reload || return $?
 
 	ebegin "Registering PE binaries with pe-exec wrapper"
 
