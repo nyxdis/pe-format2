@@ -1,3 +1,7 @@
+/* This file was derived from mono sources, and modified to be
+ * glib- and mono-independent. The original source file didn't retain
+ * any copyright notice, and mono sources were copyrighted on the terms
+ * of GNU GPLv2. */
 
 #ifndef __MONO_CIL_COFF_H__
 #define __MONO_CIL_COFF_H__
