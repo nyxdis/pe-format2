@@ -14,7 +14,7 @@ depend() {
 
 reload() {
 	ebegin "Generating configuration for pe-exec"
-	printf '%s\0%s\0%s\0%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
+	. /usr/sbin/pe-format2-conf.sh
 	eend $? || return $?
 }
 
