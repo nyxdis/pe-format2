@@ -26,10 +26,10 @@ firstworking() {
 	ewarn "\${${1}} is not set and none of the default applications were found!"
 }
 
-: ${UNKNOWN:-$(firstworking wine mono ilrun dosbox dosemu UNKNOWN)}
-: ${MSDOS:-$(firstworking dosbox dosemu MSDOS)}
-: ${WIN32:-$(firstworking wine WIN32)}
-: ${CLR:-$(firstworking mono ilrun CLR)}
+: ${UNKNOWN:=$(firstworking wine mono ilrun dosbox dosemu UNKNOWN)}
+: ${MSDOS:=$(firstworking dosbox dosemu MSDOS)}
+: ${WIN32:=$(firstworking wine WIN32)}
+: ${CLR:=$(firstworking mono ilrun CLR)}
 
 if [ -z "${UNKNOWN}" -a -z "${MSDOS}" -a -z "${WIN32}" -a -z "${CLR}" ]; then
 	${eerror} 'None of the expected interpreters were set, aborting.'
