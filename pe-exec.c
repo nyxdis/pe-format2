@@ -81,7 +81,8 @@ enum exe_type detect_format(FILE* const image) {
 					return feof(image) ? EXE_WIN32 : EXE_ERROR;
 			} else
 				return EXE_WIN32;
-		}
+		} else /* LE, LX, NE, ... */
+			return EXE_MSDOS;
 	}
 
 	return EXE_UNKNOWN; /* shouldn't be reached */
