@@ -25,13 +25,17 @@ start() {
 
 	if [ ! -d /proc/sys/fs/binfmt_misc ]; then
 		eend 1
-		eerror 'You need support for "misc binaries" in your kernel!'
+		eerror 'You need to enable support for "misc binaries" in your kernel!'
 		return 1
 	fi
 
 	if [ -f /proc/sys/fs/binfmt_misc/PE ]; then
-		ewarn "Unregistering another handler for PE files."
-		stop || return $?
+		eindent
+		ebegin "Unregistering another handler for PE files."
+		echo '-1' > /proc/sys/fs/binfmt_misc/PE
+		eend $?
+		ebegin "Registering the new handler"
+		eoutdent
 	elif [ ! -f /proc/sys/fs/binfmt_misc/register ]; then
 		local ret
 
