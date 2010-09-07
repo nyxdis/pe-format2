@@ -7,7 +7,7 @@ clean:
 ginstall: pe-exec
 	dobin pe-exec
 	dosbin pe-format2-conf.sh
-	newconfd pe-format2.conf $(PN)
-	newinitd pe-format2.init $(PN)
+	newconfd pe-format.conf $(PN)
+	newinitd pe-format.init $(PN)
 
 .PHONY: all clean ginstall
