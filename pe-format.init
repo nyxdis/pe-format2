@@ -30,14 +30,8 @@ start() {
 	fi
 
 	if [ -f /proc/sys/fs/binfmt_misc/PE ]; then
-		eend 1
-		eerror "Another handler for PE files is already registered!"
-		eerror "If that's pe-format, you should stop it:"
-		eerror "	/etc/init.d/pe-format stop"
-		eerror "You may also unregister the handler manually:"
-		eerror "	echo '-1' > /proc/sys/fs/binfmt_misc/PE"
-
-		return 1
+		ewarn "Unregistering another handler for PE files."
+		stop || return $?
 	elif [ ! -f /proc/sys/fs/binfmt_misc/register ]; then
 		local ret
 
