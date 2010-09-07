@@ -15,7 +15,7 @@ else
 fi
 
 firstworking() {
-	while [ $# -gt 1 ]; do
+	while [ ${#} -gt 1 ]; do
 		if "${1}" --version >/dev/null 2>&1; then
 			echo "${1}"
 			return
@@ -36,6 +36,6 @@ if [ -z "${UNKNOWN}" -a -z "${MSDOS}" -a -z "${WIN32}" -a -z "${CLR}" ]; then
 	exit 1
 else
 	printf '%s\0%s\0%s\0%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
-	exit $?
+	exit ${?}
 fi
 )

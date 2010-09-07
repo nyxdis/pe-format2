@@ -15,11 +15,11 @@ depend() {
 reload() {
 	ebegin "Generating configuration for pe-exec"
 	. /usr/sbin/pe-format2-conf.sh
-	eend $? || return $?
+	eend ${?} || return ${?}
 }
 
 start() {
-	reload || return $?
+	reload || return ${?}
 
 	ebegin "Registering PE binaries with pe-exec wrapper"
 
@@ -33,14 +33,14 @@ start() {
 		eindent
 		ebegin "Unregistering another handler for PE files."
 		echo '-1' > /proc/sys/fs/binfmt_misc/PE
-		eend $?
+		eend ${?}
 		ebegin "Registering the new handler"
 		eoutdent
 	elif [ ! -f /proc/sys/fs/binfmt_misc/register ]; then
 		local ret
 
 		mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc
-		ret=$?
+		ret=${?}
 		if [ ${ret} -ne 0 ]; then
 			eend ${ret}
 			return ${ret}
@@ -48,7 +48,7 @@ start() {
 	fi
 
 	echo ':PE:M::MZ::/usr/bin/pe-exec:' > /proc/sys/fs/binfmt_misc/register
-	eend $?
+	eend ${?}
 }
 
 stop() {
@@ -58,5 +58,5 @@ stop() {
 		echo '-1' > /proc/sys/fs/binfmt_misc/PE
 	fi
 
-	eend $?
+	eend ${?}
 }
