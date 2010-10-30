@@ -6,7 +6,9 @@
 #ifndef __MONO_CIL_COFF_H__
 #define __MONO_CIL_COFF_H__
 
-#include <stdint.h>
+#ifdef HAVE_STDINT_H
+#	include <stdint.h>
+#endif
 
 /*
  * 25.2.1: Method header type values
