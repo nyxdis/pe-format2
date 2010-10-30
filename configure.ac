@@ -1,5 +1,5 @@
 AC_INIT([pe-format], [2.0.3])
-AM_INIT_AUTOMAKE([-Wall foreign])
+AM_INIT_AUTOMAKE([-Wall foreign dist-bzip2])
 
 # Define only include macros we're going to use.
 AC_DEFUN([AC_INCLUDES_DEFAULT], [
