@@ -1,5 +1,6 @@
 AC_PREREQ([2.60])
 AC_INIT([pe-format], [2.0.3])
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.6 foreign dist-bzip2 no-dependencies])
 
 # Define only include macros we're going to use.
