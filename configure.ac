@@ -18,5 +18,12 @@ AC_TYPE_UINT8_T
 AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
 
+AC_ARG_ENABLE([debug],
+	AS_HELP_STRING([--enable-debug], [Enable stderr debug]))
+
+AS_IF([test "x$enable_debug" = "xyes"], [
+	AC_DEFINE([ENABLE_DEBUG], [1])
+])
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

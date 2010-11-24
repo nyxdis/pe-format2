@@ -16,6 +16,12 @@
 
 #include "cil-coff.h"
 
+#ifdef ENABLE_DEBUG
+#	define DEBUG(fstr, ...) fprintf(stderr, fstr "\n", __VA_ARGS__)
+#else
+#	define DEBUG(...)
+#endif
+
 enum exe_type {
 	EXE_UNKNOWN = 0,
 	EXE_MSDOS,
