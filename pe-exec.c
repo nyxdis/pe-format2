@@ -47,6 +47,9 @@ enum exe_type detect_format(FILE* const image) {
 		if (fread(&msdos_header, sizeof(msdos_header), 1, image) < 1)
 			return feof(image) ? EXE_UNKNOWN : EXE_ERROR;
 
+		DEBUG("msdos_sig: %02x%02x (%c%c)", msdos_header.msdos_sig[0],
+				msdos_header.msdos_sig[1], msdos_header.msdos_sig[0],
+				msdos_header.msdos_sig[1]);
 		if (!(msdos_header.msdos_sig[0] == 'M' && msdos_header.msdos_sig[1] == 'Z'))
 			return EXE_UNKNOWN;
 
@@ -55,6 +58,7 @@ enum exe_type detect_format(FILE* const image) {
 			| msdos_header.pe_offset[2] << 16
 			| msdos_header.pe_offset[3] << 24;
 
+		DEBUG("pe_offset: %08lx", pe_offset);
 		if (pe_offset == 0)
 			return EXE_MSDOS;
 		if (fseek(image, pe_offset, SEEK_SET) != 0)
@@ -72,6 +76,9 @@ enum exe_type detect_format(FILE* const image) {
 		pe_magic = dotnet_header.pe.pe_magic[0]
 			 | dotnet_header.pe.pe_magic[1] << 8;
 
+		DEBUG("pesig: %02x%02x (%c%c), pe_magic: %04x", dotnet_header.pesig[0],
+				dotnet_header.pesig[1], dotnet_header.pesig[0],
+				dotnet_header.pesig[1], pe_magic);
 		if (dotnet_header.pesig[0] == 'P' && dotnet_header.pesig[1] == 'E'
 				&& pe_magic == 0x10B) {
 			unsigned long rva = dotnet_header.datadir.pe_cli_header.rva[0]
@@ -79,6 +86,8 @@ enum exe_type detect_format(FILE* const image) {
 				| dotnet_header.datadir.pe_cli_header.rva[2] << 16
 				| dotnet_header.datadir.pe_cli_header.rva[3] << 24;
 
+			DEBUG("cli_header.size: %08lx, rva: %08lx",
+					dotnet_header.datadir.pe_cli_header.size, rva);
 			if ((dotnet_header.datadir.pe_cli_header.size != 0)
 					&& (rva != 0)) {
 				if (fseek(image, rva, SEEK_SET) == 0)
