@@ -79,8 +79,9 @@ enum exe_type detect_format(FILE* const image) {
 		DEBUG("pesig: %02x%02x (%c%c), pe_magic: %04x", dotnet_header.pesig[0],
 				dotnet_header.pesig[1], dotnet_header.pesig[0],
 				dotnet_header.pesig[1], pe_magic);
+		/* 0x10b is PE32, 0x20b is PE32+ */
 		if (dotnet_header.pesig[0] == 'P' && dotnet_header.pesig[1] == 'E'
-				&& pe_magic == 0x10B) {
+				&& (pe_magic == 0x10B || pe_magic == 0x20B)) {
 			unsigned long rva = dotnet_header.datadir.pe_cli_header.rva[0]
 				| dotnet_header.datadir.pe_cli_header.rva[1] << 8
 				| dotnet_header.datadir.pe_cli_header.rva[2] << 16
