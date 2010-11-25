@@ -2,7 +2,7 @@
 # Regenerate the configuration for pe-exec
 # (this is supposed to be sourced by the init.d script)
 
-export UNKNOWN MSDOS WIN32 CLR
+export UNKNOWN MSDOS WIN32 CLR WIN64
 
 (
 if [ -n "${RC_SVCNAME}" ]; then
@@ -30,12 +30,13 @@ firstworking() {
 : ${MSDOS:=$(firstworking dosbox dosemu MSDOS)}
 : ${WIN32:=$(firstworking wine WIN32)}
 : ${CLR:=$(firstworking mono ilrun CLR)}
+: ${WIN64:=$(firstworking wine64 WIN64)}
 
-if [ -z "${UNKNOWN}" -a -z "${MSDOS}" -a -z "${WIN32}" -a -z "${CLR}" ]; then
+if [ -z "${UNKNOWN}" -a -z "${MSDOS}" -a -z "${WIN32}" -a -z "${CLR}" -a -z "${WIN64}" ]; then
 	${eerror} 'None of the expected interpreters were set, aborting.'
 	exit 1
 else
-	printf '%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
+	printf '%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" "${WIN64}" > /var/lib/pe-format2
 	exit ${?}
 fi
 )

@@ -30,6 +30,7 @@ enum exe_type {
 	EXE_MSDOS,
 	EXE_WIN32,
 	EXE_CLR,
+	EXE_WIN64,
 	EXE_ERROR
 };
 
