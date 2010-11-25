@@ -35,7 +35,7 @@ if [ -z "${UNKNOWN}" -a -z "${MSDOS}" -a -z "${WIN32}" -a -z "${CLR}" ]; then
 	${eerror} 'None of the expected interpreters were set, aborting.'
 	exit 1
 else
-	printf '%s\0%s\0%s\0%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
+	printf '%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" > /var/lib/pe-format2
 	exit ${?}
 fi
 )
