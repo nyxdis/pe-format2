@@ -73,6 +73,9 @@ enum exe_type detect_format(FILE* const image) {
 		if (fread(&dotnet_header, sizeof(dotnet_header), 1, image) < 1)
 			return feof(image) ? EXE_MSDOS : EXE_ERROR;
 
+		DEBUG("coff_machine: %04x", dotnet_header.coff.coff_machine);
+		/* 014c is for x86, 8664 for amd64 */
+
 		pe_magic = dotnet_header.pe.pe_magic[0]
 			 | dotnet_header.pe.pe_magic[1] << 8;
 
