@@ -18,6 +18,9 @@
 
 #ifdef ENABLE_DEBUG
 #	define DEBUG(fstr, ...) fprintf(stderr, fstr "\n", __VA_ARGS__)
+
+int pretending = 0;
+
 #else
 #	define DEBUG(...)
 #endif
@@ -165,6 +168,13 @@ char* read_conf(const enum exe_type et) {
  * 'exe', modifying the 'argv' as necessary. */
 void doexec(char* const exe, char* argv[]) {
 	argv[0] = exe;
+
+#ifdef ENABLE_DEBUG
+	DEBUG("doexec(%s, [%s, ...])", exe, argv[1]);
+	if (pretending)
+		return;
+#endif
+
 	execvp(exe, argv);
 	perror("execv() failed");
 }
@@ -177,6 +187,13 @@ int main(const int argc, char* argv[]) {
 		fprintf(stderr, "Synopsis: %s file.exe [...]\n", argv[0]);
 		return 0;
 	}
+
+#ifdef ENABLE_DEBUG
+	if (!strcmp(argv[1], "--pretend") && argc >= 3) {
+		pretending = 1;
+		argv[1] = argv[2]; /* we won't be using argv[2+] anyway */
+	}
+#endif
 
 	image = fopen(argv[1], "r");
 	et = detect_format(image); /* image can be NULL here */
