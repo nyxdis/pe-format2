@@ -77,11 +77,6 @@ enum exe_type detect_format(FILE* const image) {
 		if (fread(&dotnet_header, sizeof(dotnet_header), 1, image) < 1)
 			return feof(image) ? EXE_MSDOS : EXE_ERROR;
 
-		DEBUG("coff_machine: %04x", dotnet_header.coff.coff_machine);
-		/* 014c is for x86, 8664 for amd64 */
-		if (dotnet_header.coff.coff_machine == 0x8664)
-			return EXE_WIN64;
-
 		pe_magic = dotnet_header.pe.pe_magic[0]
 			 | dotnet_header.pe.pe_magic[1] << 8;
 
@@ -96,9 +91,13 @@ enum exe_type detect_format(FILE* const image) {
 				| dotnet_header.datadir.pe_cli_header.rva[2] << 16
 				| dotnet_header.datadir.pe_cli_header.rva[3] << 24;
 
-			DEBUG("cli_header.size: %08lx, rva: %08lx",
+			DEBUG("coff_machine: %04x, cli_header.size: %08lx, rva: %08lx",
+					dotnet_header.coff.coff_machine,
 					dotnet_header.datadir.pe_cli_header.size, rva);
-			if ((dotnet_header.datadir.pe_cli_header.size != 0)
+			/* 014c is for x86, 8664 for amd64 */
+			if (dotnet_header.coff.coff_machine == 0x8664)
+				return EXE_WIN64;
+			else if ((dotnet_header.datadir.pe_cli_header.size != 0)
 					&& (rva != 0)) {
 				if (fseek(image, rva, SEEK_SET) == 0)
 					return EXE_CLR;
