@@ -15,7 +15,7 @@ depend() {
 reload() {
 	ebegin "Generating configuration for pe-exec"
 	export UNKNOWN MSDOS WIN32 CLR WIN64
-	/usr/sbin/pe-format2-conf.sh
+	@sbindir@/pe-format2-conf.sh
 	eend ${?} || return ${?}
 }
 

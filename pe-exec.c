@@ -34,7 +34,7 @@ enum exe_type {
 	EXE_ERROR
 };
 
-const char* const handlers_path = "/var/lib/pe-format2";
+const char* const handlers_path = STATEFILE;
 
 /* Return the fileformat of executable pointed by 'image' or EXE_ERROR
  * if an error occures (or 'image' is NULL, which means the error

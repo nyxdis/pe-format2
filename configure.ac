@@ -13,6 +13,7 @@ m4_ifval([$1], [$1
 ])])
 
 AC_PROG_CC
+AC_PROG_SED
 AC_CHECK_HEADERS([stdint.h])
 AC_TYPE_UINT8_T
 AC_TYPE_UINT16_T
