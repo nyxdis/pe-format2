@@ -1,10 +1,7 @@
 #!/bin/sh
-# Regenerate the configuration for pe-exec
-# (this is supposed to be sourced by the init.d script)
+# Regenerate the configuration for pe-exec, using the variables exported
+# in the environment (hopefully by the init.d script).
 
-export UNKNOWN MSDOS WIN32 CLR WIN64
-
-(
 if [ -n "${RC_SVCNAME}" ]; then
 	ewarn=ewarn
 	eerror=eerror
@@ -39,4 +36,3 @@ else
 	printf '%s\0' "${UNKNOWN}" "${MSDOS}" "${WIN32}" "${CLR}" "${WIN64}" > /var/lib/pe-format2
 	exit ${?}
 fi
-)
