@@ -15,7 +15,7 @@
 #include "pe-config.h"
 #include "pe-recog.h"
 
-const char* const handlers_path = STATEFILE;
+static const char* const handlers_path = STATEFILE;
 
 /* Read the handlers configuration file and find a handler for specified
  * executable type 'et'. Returns the pointer to an internal buffer
@@ -23,8 +23,8 @@ const char* const handlers_path = STATEFILE;
 char* read_conf(const enum exe_type et) {
 	FILE* const f = fopen(handlers_path, "r");
 	static char buf[2049];
-	int numread = 0;
-	int slen;
+	size_t numread = 0;
+	size_t slen;
 	enum exe_type i = 0;
 
 	if (!f) {
@@ -35,7 +35,7 @@ char* read_conf(const enum exe_type et) {
 	buf[sizeof(buf)-1] = 0; /* make sure strlen() doesn't segfault */
 
 	while (1) {
-		const int ret = fread(&buf[numread], sizeof(char), (sizeof(buf) / sizeof(char)) - numread - 1, f);
+		const size_t ret = fread(&buf[numread], sizeof(char), (sizeof(buf) / sizeof(char)) - numread - 1, f);
 		numread += ret;
 
 		slen = strlen(buf);
@@ -66,7 +66,4 @@ char* read_conf(const enum exe_type et) {
 			return NULL;
 		}
 	}
-
-	fclose(f);
-	return NULL;
 }

@@ -23,7 +23,7 @@ int pretending = 0;
 
 /* Execute the program supplied on 'argv' using the handler supplied as
  * 'exe', modifying the 'argv' as necessary. */
-void doexec(char* const exe, char* argv[]) {
+static void doexec(char* const exe, char* argv[]) {
 	argv[0] = exe;
 
 #ifdef ENABLE_DEBUG
