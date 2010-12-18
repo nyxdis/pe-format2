@@ -13,6 +13,10 @@
 #include "cil-coff.h"
 #include "pe-recog.h"
 
+#ifdef HAVE_STDINT_H
+#	include <stdint.h>
+#endif
+
 #ifdef ENABLE_DEBUG
 #	define DEBUG(fstr, ...) fprintf(stderr, fstr "\n", __VA_ARGS__)
 #else
@@ -29,7 +33,7 @@ enum exe_type detect_format(FILE* const image) {
 	/* Parse the MSDOS header */
 	{
 		MSDOSHeader msdos_header;
-		unsigned long pe_offset;
+		uint32_t pe_offset;
 
 		if (fread(&msdos_header, sizeof(msdos_header), 1, image) < 1)
 			return feof(image) ? EXE_UNKNOWN : EXE_ERROR;
@@ -55,7 +59,7 @@ enum exe_type detect_format(FILE* const image) {
 	/* Parse the PE header */
 	{
 		DotNetHeader dotnet_header;
-		unsigned short pe_magic;
+		uint16_t pe_magic;
 
 		if (fread(&dotnet_header, sizeof(dotnet_header), 1, image) < 1)
 			return feof(image) ? EXE_MSDOS : EXE_ERROR;
@@ -69,7 +73,7 @@ enum exe_type detect_format(FILE* const image) {
 		/* 0x10b is PE32, 0x20b is PE32+ */
 		if (dotnet_header.pesig[0] == 'P' && dotnet_header.pesig[1] == 'E'
 				&& (pe_magic == 0x10B || pe_magic == 0x20B)) {
-			unsigned long rva = dotnet_header.datadir.pe_cli_header.rva[0]
+			uint32_t rva = dotnet_header.datadir.pe_cli_header.rva[0]
 				| dotnet_header.datadir.pe_cli_header.rva[1] << 8
 				| dotnet_header.datadir.pe_cli_header.rva[2] << 16
 				| dotnet_header.datadir.pe_cli_header.rva[3] << 24;
