@@ -3,15 +3,6 @@ AC_INIT([pe-format], [2.0.4])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.6 foreign dist-bzip2 no-dependencies])
 
-# Define only include macros we're going to use.
-AC_DEFUN([AC_INCLUDES_DEFAULT], [
-m4_ifval([$1], [$1
-], [dnl
-#ifdef HAVE_STDINT_H
-#	include <stdint.h>
-#endif
-])])
-
 AC_PROG_CC
 AC_PROG_SED
 AC_CHECK_HEADERS([stdint.h])
