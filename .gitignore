@@ -9,3 +9,5 @@ Makefile.in
 
 *.o
 /pe-exec
+/pe-format.init
+/pe-format2-conf.sh
