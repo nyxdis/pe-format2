@@ -8,6 +8,8 @@
  *	Licensed under the GNU GPL v2 or higher. See COPYING for details.
  */
 
+#include "config.h"
+
 #include <stdio.h>
 
 #include "cil-coff.h"

@@ -23,8 +23,9 @@ AC_ARG_ENABLE([debug],
 	AS_HELP_STRING([--enable-debug], [Enable stderr debug]))
 
 AS_IF([test "x$enable_debug" = "xyes"], [
-	AC_DEFINE([ENABLE_DEBUG], [1])
+	AC_DEFINE([ENABLE_DEBUG], [1], [Enable debugging code])
 ])
 
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

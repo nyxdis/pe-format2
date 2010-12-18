@@ -6,6 +6,8 @@
 #ifndef __MONO_CIL_COFF_H__
 #define __MONO_CIL_COFF_H__
 
+#include "config.h"
+
 #ifdef HAVE_STDINT_H
 #	include <stdint.h>
 #endif
