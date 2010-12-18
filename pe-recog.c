@@ -18,9 +18,9 @@
 #endif
 
 #ifdef ENABLE_DEBUG
-#	define DEBUG(fstr, ...) fprintf(stderr, fstr "\n", __VA_ARGS__)
+#	define DEBUG(fstr, a, b, c, d, e) fprintf(stderr, fstr "\n", a, b, c, d, e)
 #else
-#	define DEBUG(...)
+#	define DEBUG(fstr, a, b, c, d, e)
 #endif
 
 /* Return the fileformat of executable pointed by 'image' or EXE_ERROR
@@ -40,7 +40,7 @@ enum exe_type detect_format(FILE* const image) {
 
 		DEBUG("msdos_sig: %02x%02x (%c%c)", msdos_header.msdos_sig[0],
 				msdos_header.msdos_sig[1], msdos_header.msdos_sig[0],
-				msdos_header.msdos_sig[1]);
+				msdos_header.msdos_sig[1], 0);
 		if (!(msdos_header.msdos_sig[0] == 'M' && msdos_header.msdos_sig[1] == 'Z'))
 			return EXE_UNKNOWN;
 
@@ -49,7 +49,7 @@ enum exe_type detect_format(FILE* const image) {
 			| msdos_header.pe_offset[2] << 16
 			| msdos_header.pe_offset[3] << 24;
 
-		DEBUG("pe_offset: %08lx", pe_offset);
+		DEBUG("pe_offset: %08lx", pe_offset, 0, 0, 0, 0);
 		if (pe_offset == 0)
 			return EXE_MSDOS;
 		if (fseek(image, pe_offset, SEEK_SET) != 0)
@@ -80,7 +80,7 @@ enum exe_type detect_format(FILE* const image) {
 
 			DEBUG("coff_machine: %04x, cli_header.size: %08lx, rva: %08lx",
 					dotnet_header.coff.coff_machine,
-					dotnet_header.datadir.pe_cli_header.size, rva);
+					dotnet_header.datadir.pe_cli_header.size, rva, 0, 0);
 			/* 014c is for x86, 8664 for amd64 */
 			if (dotnet_header.coff.coff_machine == 0x8664)
 				return EXE_WIN64;
