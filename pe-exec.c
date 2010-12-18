@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 
 #ifdef ENABLE_DEBUG
 int pretending = 0;
