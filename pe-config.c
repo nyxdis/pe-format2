@@ -8,8 +8,8 @@
  *	Licensed under the GNU GPL v2 or higher. See COPYING for details.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "pe-config.h"
