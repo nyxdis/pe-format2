@@ -6,7 +6,7 @@ EXTRA_DIST = pe-format.conf pe-format.init.in pe-format2-conf.sh.in
 
 pkgstatefile = @localstatedir@/pe-format2
 
-pe_exec_SOURCES = pe-exec.c pe-recog.c pe-recog.h cil-coff.h
+pe_exec_SOURCES = pe-exec.c pe-recog.c pe-recog.h pe-config.c pe-config.h cil-coff.h
 pe_exec_CPPFLAGS = -DSTATEFILE=\"$(pkgstatefile)\"
 
 $(noinst_SCRIPTS) $(dist_sbin_SCRIPTS): Makefile
