@@ -18,21 +18,17 @@
 #ifdef HAVE_STDINT_H
 #	include <stdint.h>
 #endif
-#ifdef HAVE_INTTYPES_H
-#	include <inttypes.h>
-#endif
-
-#ifndef PRIx32
-#	define PRIx32 "lx"
-#endif
-#ifndef PRIx16
-#	define PRIx16 "x"
-#endif
 
 #ifdef ENABLE_DEBUG
-#	define DEBUG(fstr, a, b, c, d, e) fprintf(stderr, fstr "\n", a, b, c, d, e)
-#else
-#	define DEBUG(fstr, a, b, c, d, e)
+#	ifdef HAVE_INTTYPES_H
+#		include <inttypes.h>
+#	endif
+#	ifndef PRIx32
+#		define PRIx32 "lx"
+#	endif
+#	ifndef PRIx16
+#		define PRIx16 "x"
+#	endif
 #endif
 
 /* Return the fileformat of executable pointed by 'image' or EXE_ERROR
@@ -50,9 +46,11 @@ enum exe_type detect_format(FILE* const image) {
 		if (fread(&msdos_header, sizeof(msdos_header), 1, image) < 1)
 			return feof(image) ? EXE_UNKNOWN : EXE_ERROR;
 
-		DEBUG("msdos_sig: %02hhx%02hhx (%c%c)", msdos_header.msdos_sig[0],
-				msdos_header.msdos_sig[1], msdos_header.msdos_sig[0],
-				msdos_header.msdos_sig[1], 0);
+#ifdef ENABLE_DEBUG
+		fprintf(stderr, "msdos_sig: %02hhx%02hhx (%c%c)\n",
+				msdos_header.msdos_sig[0], msdos_header.msdos_sig[1],
+				msdos_header.msdos_sig[0], msdos_header.msdos_sig[1]);
+#endif
 		if (!(msdos_header.msdos_sig[0] == 'M' && msdos_header.msdos_sig[1] == 'Z'))
 			return EXE_UNKNOWN;
 
@@ -61,7 +59,9 @@ enum exe_type detect_format(FILE* const image) {
 			| msdos_header.pe_offset[2] << 16
 			| msdos_header.pe_offset[3] << 24;
 
-		DEBUG("pe_offset: %08" PRIx32, pe_offset, 0, 0, 0, 0);
+#ifdef ENABLE_DEBUG
+		fprintf(stderr, "pe_offset: %08" PRIx32 "\n", pe_offset);
+#endif
 		if (pe_offset == 0)
 			return EXE_MSDOS;
 		if (fseek(image, pe_offset, SEEK_SET) != 0)
@@ -79,9 +79,11 @@ enum exe_type detect_format(FILE* const image) {
 		pe_magic = dotnet_header.pe.pe_magic[0]
 			 | dotnet_header.pe.pe_magic[1] << 8;
 
-		DEBUG("pesig: %02hhx%02hhx (%c%c), pe_magic: %04" PRIx16, dotnet_header.pesig[0],
-				dotnet_header.pesig[1], dotnet_header.pesig[0],
-				dotnet_header.pesig[1], pe_magic);
+#ifdef ENABLE_DEBUG
+		fprintf(stderr, "pesig: %02hhx%02hhx (%c%c), pe_magic: %04" PRIx16 "\n",
+				dotnet_header.pesig[0], dotnet_header.pesig[1],
+				dotnet_header.pesig[0], dotnet_header.pesig[1], pe_magic);
+#endif
 		/* 0x10b is PE32, 0x20b is PE32+ */
 		if (dotnet_header.pesig[0] == 'P' && dotnet_header.pesig[1] == 'E'
 				&& (pe_magic == 0x10B || pe_magic == 0x20B)) {
@@ -90,10 +92,12 @@ enum exe_type detect_format(FILE* const image) {
 				| dotnet_header.datadir.pe_cli_header.rva[2] << 16
 				| dotnet_header.datadir.pe_cli_header.rva[3] << 24;
 
-			DEBUG("coff_machine: %04" PRIx16 ", cli_header.size: %08" PRIx32
-					", rva: %08" PRIx32,
+#ifdef ENABLE_DEBUG
+			fprintf(stderr, "coff_machine: %04" PRIx16 ", cli_header.size: %08" PRIx32
+					", rva: %08" PRIx32 "\n",
 					dotnet_header.coff.coff_machine,
-					dotnet_header.datadir.pe_cli_header.size, rva, 0, 0);
+					dotnet_header.datadir.pe_cli_header.size, rva);
+#endif
 			/* 014c is for x86, 8664 for amd64 */
 			if (dotnet_header.coff.coff_machine == 0x8664)
 				return EXE_WIN64;
