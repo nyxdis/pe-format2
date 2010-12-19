@@ -1,5 +1,5 @@
 bin_PROGRAMS = pe-exec
-dist_sbin_SCRIPTS = pe-format2-conf.sh
+sbin_SCRIPTS = pe-format2-conf.sh
 noinst_SCRIPTS = pe-format.init
 noinst_DATA = pe-format.conf
 
