@@ -1,8 +1,8 @@
-# /etc/conf.d/pe-format
+# @sysconfdir@/conf.d/pe-format
 
 # Define the applications which will be used by pe-exec to execute various types
 # of PE executables. After performing any changes, please run:
-#	/etc/init.d/pe-format reload
+#	@sysconfdir@/init.d/pe-format reload
 # to update the binary configuration file used by pe-exec.
 
 # Additionally, the configuration will be updated automatically each time
