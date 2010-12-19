@@ -27,7 +27,7 @@ static void doexec(char* const exe, char* argv[]) {
 	argv[0] = exe;
 
 #ifdef ENABLE_DEBUG
-	fprintf(stderr, "doexec(%s, [%s, ...])", exe, argv[1]);
+	fprintf(stderr, "doexec(%s, [%s, ...])\n", exe, argv[1]);
 	if (pretending)
 		return;
 #endif
