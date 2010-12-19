@@ -5,7 +5,6 @@ AM_INIT_AUTOMAKE([1.6 foreign dist-bzip2 no-dependencies])
 
 AC_PROG_CC
 AC_PROG_SED
-AC_CHECK_HEADERS([stdint.h])
 AC_TYPE_UINT8_T
 AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
